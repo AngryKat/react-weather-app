@@ -4,6 +4,9 @@ import Search from "./components/search";
 import CityCard from "./components/city-card/city-card";
 import { useState } from "react";
 import { City } from "./components/search/search";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   const [cities, setCities] = useState<City[]>([]);
@@ -13,14 +16,13 @@ function App() {
       setCities((prev) => prev.concat(searchValue));
     }
   };
-  console.log("aaa ", { cities });
   return (
-    <>
+    <QueryClientProvider client={queryClient} contextSharing={true}>
       <CssBaseline />
       <Container>
         <Stack justifyContent="center" alignItems="center" p={3} spacing={2}>
           <Search onSearch={handleSearch} />
-          <Grid container spacing={2} justifyContent="center" alignItems="center">
+          <Grid container spacing={2} alignItems="center">
             {cities.length !== 0 &&
               cities.map((city) => (
                 <Grid item>
@@ -30,7 +32,7 @@ function App() {
           </Grid>
         </Stack>
       </Container>
-    </>
+    </QueryClientProvider>
   );
 }
 

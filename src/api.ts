@@ -54,29 +54,23 @@ const DUMMY_CITIES = [
 
 type CityResponse = { data: CityGeoDB[] };
 
-const options = {
-  url: GEO_DB_API_URL,
-
-  headers: {
-    "X-RapidAPI-Key": GEO_DB_API_KEY,
-    "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
-  },
-};
-
 export const getCities = async (namePrefix?: string) => {
-  return { data: DUMMY_CITIES };
-  // try {
-  //   const { data } = await axios.get<CityResponse>(GEO_DB_API_URL, {
-  //     ...options,
-  //     params: {
-  //       minPopulation: "150000",
-  //       namePrefix,
-  //     },
-  //   });
-  //   return data;
-  // } catch (error) {
-  //   console.error(error);
-  // }
+  // return { data: DUMMY_CITIES };
+  try {
+    const { data } = await axios.get<CityResponse>(GEO_DB_API_URL, {
+      headers: {
+        "X-RapidAPI-Key": GEO_DB_API_KEY,
+        "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
+      },
+      params: {
+        minPopulation: "150000",
+        namePrefix,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const getCurrentWeather = async (
@@ -96,5 +90,4 @@ export const getCurrentWeather = async (
   } catch (error) {
     console.error(error);
   }
-  // https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
 };

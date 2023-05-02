@@ -1,8 +1,10 @@
-import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { debounce } from "@mui/material/utils";
 import { getCities } from "../../api";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { CircularProgress } from "@mui/material";
 
 export interface City {
   id: number;
@@ -10,34 +12,35 @@ export interface City {
   value: string;
 }
 
-const Search = ({ onSearch }: { onSearch: (searchValue: City | null) => void }) => {
-  const [finalValue, setFinalValue] = React.useState<City | null>(null);
-  const [searchedOptions, setSearchedOptions] = React.useState<City[]>(
-    []
-  );
+const Search = ({
+  onSearch,
+}: {
+  onSearch: (searchValue: City | null) => void;
+}) => {
+  const [matchValue, setMatchValue] = useState("");
+  const [finalValue, setFinalValue] = useState<City | null>(null);
+  const { data: searchedOptions, isLoading, refetch } = useQuery({
+    queryKey: ["searchValue"],
+    queryFn: () => getCities(matchValue),
+    // initialData: "",
+  });
 
-  const fetchOptions = async (matchValue: string) => {
-    if (matchValue === "") return;
-    const response = await getCities(matchValue);
-    if (response) {
-      setSearchedOptions(
-        response.data.map((city) => ({
-          id: city.id,
-          label: `${city.name}, ${city.countryCode}`,
-          value: `${city.latitude} ${city.longitude}`,
-        }))
-      );
-    }
-  };
+  if (!searchedOptions) return <>Hello!</>;
 
-  const fetchOptionsDebounced = debounce(fetchOptions, 1000);
+  const transformedSearchedOptions = searchedOptions.data.map((city) => ({
+    id: city.id,
+    label: `${city.name}, ${city.countryCode}`,
+    value: `${city.latitude} ${city.longitude}`,
+  }));
+
+  const refetchOptionsDebounced = debounce(refetch, 1000);
 
   return (
     <Autocomplete
       id="serach-locations"
       sx={{ width: 300 }}
       filterOptions={(x) => x}
-      options={searchedOptions}
+      options={transformedSearchedOptions}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       autoComplete
       includeInputInList
@@ -49,10 +52,26 @@ const Search = ({ onSearch }: { onSearch: (searchValue: City | null) => void }) 
         onSearch(newValue);
       }}
       onInputChange={(event, newInputValue) => {
-        fetchOptionsDebounced(newInputValue);
+        setMatchValue(newInputValue);
+        refetchOptionsDebounced();
       }}
       renderInput={(params) => (
-        <TextField {...params} label="Add a location" fullWidth />
+        <TextField
+          {...params}
+          label="Add a location"
+          fullWidth
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <>
+                {isLoading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
+                {params.InputProps.endAdornment}
+              </>
+            ),
+          }}
+        />
       )}
     />
   );
