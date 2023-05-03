@@ -13,49 +13,9 @@ interface CityGeoDB {
   countryCode: string;
 }
 
-const DUMMY_CITIES = [
-  {
-    id: 3386644,
-    wikiDataId: "Q3694483",
-    name: "Ab Band District",
-    country: "Afghanistan",
-    countryCode: "AF",
-    region: "Ghazni",
-    regionCode: "GHA",
-    latitude: 32.983,
-    longitude: 67.967,
-    population: 0,
-  },
-  {
-    id: 3228129,
-    wikiDataId: "Q1650529",
-    name: "Achin",
-    country: "Afghanistan",
-    countryCode: "AF",
-    region: "Nangarhar",
-    regionCode: "NAN",
-    latitude: 34.0894,
-    longitude: 70.683,
-    population: 0,
-  },
-  {
-    id: 3223788,
-    wikiDataId: "Q2674014",
-    name: "Ajristan District",
-    country: "Afghanistan",
-    countryCode: "AF",
-    region: "Ghazni",
-    regionCode: "GHA",
-    latitude: 33.466962,
-    longitude: 67.238846,
-    population: 0,
-  },
-];
-
 type CityResponse = { data: CityGeoDB[] };
 
 export const getCities = async (namePrefix?: string) => {
-  // return { data: DUMMY_CITIES };
   try {
     const { data } = await axios.get<CityResponse>(GEO_DB_API_URL, {
       headers: {
@@ -67,7 +27,7 @@ export const getCities = async (namePrefix?: string) => {
         namePrefix,
       },
     });
-    return data;
+    return data || [];
   } catch (error) {
     console.error(error);
   }

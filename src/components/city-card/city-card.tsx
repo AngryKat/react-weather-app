@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import {
   Button,
   Card,
@@ -8,35 +9,56 @@ import {
   Stack,
   Box,
   CircularProgress,
+  CardHeader,
+  IconButton,
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { City } from "../search/search";
+import ClearIcon from "@mui/icons-material/Clear";
 import { getCurrentWeather } from "../../api";
-import { useQuery } from "@tanstack/react-query";
+import { City } from "../types";
+import { removeCityFromLocalStorage } from "../utils";
 
 const CityCard = ({ city }: { city: City }) => {
-  const [lat, lon] = city.value.split(" ");
-  const { isLoading, data: currentWeather } = useQuery({
-    queryKey: [`currentWeather_${lat}_${lon}`],
+  const [lat, lon] = city.coords.split(" ");
+  const {
+    isLoading,
+    data: currentWeather,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["currentWeather", lat, lon],
     queryFn: () => getCurrentWeather(lat, lon),
+    refetchOnWindowFocus: false,
   });
 
   if (isLoading) {
-    <Box sx={{ display: "flex" }}>
-      <CircularProgress />
-    </Box>;
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (isError) {
+    return <>Oh no</>;
   }
 
   return (
     <Card>
+      <CardHeader
+        title={city.name}
+        subheader={currentWeather.weather[0].description}
+        action={
+          <IconButton
+            aria-label="remove"
+            onClick={() => removeCityFromLocalStorage(city.id)}
+          >
+            <ClearIcon />
+          </IconButton>
+        }
+      />
       <CardContent>
         <Stack spacing={2}>
-          <Stack>
-            <Typography variant="h6">{city.label}</Typography>
-            <Typography variant="subtitle2">
-              {currentWeather.weather[0].description}
-            </Typography>
-          </Stack>
           <Stack direction="row">
             <img
               width={60}
@@ -51,31 +73,44 @@ const CityCard = ({ city }: { city: City }) => {
               </Typography>
             </Typography>
           </Stack>
-          <Typography variant="body1">
-            <Grid container spacing={4}>
-              <Grid item>
-                <Stack spacing={0.5}>
-                  <span style={{ display: "flex", alignItems: "center" }}>
-                    Wind: {currentWeather.wind.speed}m/s{" "}
-                  </span>
-                  <span>ESE {currentWeather.main.pressure}hPa</span>
-                </Stack>
-              </Grid>
-              <Grid item>
-                <Stack spacing={0.5}>
-                  <span>Humidity: {currentWeather.main.humidity}%</span>
-                  <span>
-                    Visibility: {(currentWeather.visibility / 1000).toFixed(1)}
-                    km
-                  </span>
-                </Stack>
-              </Grid>
+          <Grid container spacing={4}>
+            <Grid item>
+              <Stack spacing={0.5}>
+                <Typography variant="body1">
+                  Wind: {currentWeather.wind.speed}m/s
+                </Typography>
+                <Typography variant="body1">
+                  ESE {currentWeather.main.pressure}hPa
+                </Typography>
+              </Stack>
             </Grid>
-          </Typography>
+            <Grid item>
+              <Stack spacing={0.5}>
+                <Typography variant="body1">
+                  Humidity: {currentWeather.main.humidity}%
+                </Typography>
+                <Typography variant="body1">
+                  Visibility: {(currentWeather.visibility / 1000).toFixed(1)}
+                  km
+                </Typography>
+              </Stack>
+            </Grid>
+          </Grid>
         </Stack>
       </CardContent>
       <CardActions>
-        <Button size="small" endIcon={<ArrowForwardIcon />}>
+        <Button
+          onClick={() => {
+            refetch();
+          }}
+        >
+          Refresh
+        </Button>
+        <Button
+          href={`/city/${city.id}`}
+          size="small"
+          endIcon={<ArrowForwardIcon />}
+        >
           details and forecast
         </Button>
       </CardActions>
