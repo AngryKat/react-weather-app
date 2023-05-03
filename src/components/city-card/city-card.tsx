@@ -14,22 +14,30 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ClearIcon from "@mui/icons-material/Clear";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { getCurrentWeather } from "../../api";
-import { City } from "../types";
-import { removeCityFromLocalStorage } from "../utils";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCityById } from "../../store/cities-reducer/selectors";
+import { removeCity } from "../../store/cities-reducer/actions";
 
-const CityCard = ({ city }: { city: City }) => {
+
+export const useFetchCityWeather = (lat: string, lon: string) => useQuery({
+  queryKey: ["currentWeather", lat, lon],
+  queryFn: () => getCurrentWeather(lat, lon),
+  refetchOnWindowFocus: false,
+});
+
+
+const CityCard = ({ id }: { id: number }) => {
+  const city = useSelector(selectCityById(id));
   const [lat, lon] = city.coords.split(" ");
   const {
-    isLoading,
     data: currentWeather,
+    isLoading,
     isError,
     refetch,
-  } = useQuery({
-    queryKey: ["currentWeather", lat, lon],
-    queryFn: () => getCurrentWeather(lat, lon),
-    refetchOnWindowFocus: false,
-  });
+  } = useFetchCityWeather(lat, lon);
+  const dispatch = useDispatch();
 
   if (isLoading) {
     return (
@@ -51,7 +59,7 @@ const CityCard = ({ city }: { city: City }) => {
         action={
           <IconButton
             aria-label="remove"
-            onClick={() => removeCityFromLocalStorage(city.id)}
+            onClick={() => dispatch(removeCity({ id: city.id }))}
           >
             <ClearIcon />
           </IconButton>
@@ -66,12 +74,14 @@ const CityCard = ({ city }: { city: City }) => {
               alt={`weather icon for ${currentWeather.weather[0].description}`}
               src={`http://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png`}
             />
-            <Typography variant="h4">
-              {currentWeather.main.temp.toFixed()}°C
+            <div>
+              <Typography variant="h4">
+                {currentWeather.main.temp.toFixed()}°C
+              </Typography>
               <Typography variant="subtitle1">
                 Feels like {currentWeather.main.feels_like.toFixed()}°C
               </Typography>
-            </Typography>
+            </div>
           </Stack>
           <Grid container spacing={4}>
             <Grid item>
@@ -100,6 +110,7 @@ const CityCard = ({ city }: { city: City }) => {
       </CardContent>
       <CardActions>
         <Button
+          endIcon={<RefreshIcon />}
           onClick={() => {
             refetch();
           }}
@@ -107,7 +118,7 @@ const CityCard = ({ city }: { city: City }) => {
           Refresh
         </Button>
         <Button
-          href={`/city/${city.id}`}
+          href={`/city/${city.id}?lon=${lon}&lat=${lat}`}
           size="small"
           endIcon={<ArrowForwardIcon />}
         >

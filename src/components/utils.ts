@@ -1,4 +1,6 @@
+import { useQuery } from "react-query";
 import { City } from "./types";
+import { getCurrentWeather } from "../api";
 
 export const addCityToLocalStorage = (city: City) => {
   const currentArray = localStorage.getItem("cities");

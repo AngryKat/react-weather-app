@@ -1,19 +1,19 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Container, CssBaseline } from "@mui/material";
-import Home from "./pages/home-page";
+import CityCardsGridPage from "./pages/city-cards-grid-page";
+import WeatherDetailsPage from "./pages/weather-details-page";
 import "./App.css";
-import WeatherDetails from "./pages/weather-details-page";
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <CityCardsGridPage />,
   },
   {
     path: "/city/:id",
-    element: <WeatherDetails />,
+    element: <WeatherDetailsPage />,
   },
 ]);
 
@@ -21,7 +21,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <CssBaseline />
-      <Container>
+      <Container sx={{ height: "100%" }}>
         <RouterProvider router={router} />
       </Container>
     </QueryClientProvider>

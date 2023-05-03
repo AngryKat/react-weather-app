@@ -7,6 +7,13 @@ import { debounce } from "@mui/material/utils";
 import { getCities } from "../../api";
 import { City } from "../types";
 
+const useSearchLocationOptions = (matchSearchValue: string) =>
+  useQuery({
+    refetchOnWindowFocus: false,
+    queryKey: ["search", matchSearchValue],
+    queryFn: () => getCities(matchSearchValue),
+  });
+
 const Search = ({
   onSearch,
 }: {
@@ -14,14 +21,10 @@ const Search = ({
 }) => {
   const [matchValue, setMatchValue] = useState("");
   const [finalValue, setFinalValue] = useState<City | null>(null);
-  const { data: searchedOptions } = useQuery({
-    refetchOnWindowFocus: false,
-    queryKey: ["search", matchValue],
-    queryFn: () => getCities(matchValue),
-  });
+  const { data: locationOptions } = useSearchLocationOptions(matchValue);
 
-  const transformedSearchedOptions = searchedOptions
-    ? (searchedOptions).data.map((city) => ({
+  const transformedLocationOptions = locationOptions
+    ? locationOptions.data.map((city) => ({
         id: city.id,
         name: `${city.name}, ${city.countryCode}`,
         coords: `${city.latitude} ${city.longitude}`,
@@ -31,7 +34,7 @@ const Search = ({
   const handleOnInputChange = debounce((event, newInputValue) => {
     const [cityName] = newInputValue.split(",");
     setMatchValue(cityName);
-  }, 1000);
+  }, 1100);
 
   return (
     <Autocomplete
@@ -39,14 +42,14 @@ const Search = ({
       sx={{ width: 300 }}
       filterOptions={(x) => x}
       getOptionLabel={(option) => option.name}
-      options={transformedSearchedOptions}
+      options={transformedLocationOptions}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       autoComplete
       includeInputInList
       filterSelectedOptions
       value={finalValue}
       noOptionsText={
-        !searchedOptions ? (
+        !locationOptions ? (
           <CircularProgress color="inherit" size={20} />
         ) : (
           "No location found"
