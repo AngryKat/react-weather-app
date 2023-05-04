@@ -118,7 +118,7 @@ const CityCard = ({ id }: { id: number }) => {
           Refresh
         </Button>
         <Button
-          href={`/city/${city.id}?lon=${lon}&lat=${lat}`}
+          href={`/city/${city.id}`}
           size="small"
           endIcon={<ArrowForwardIcon />}
         >

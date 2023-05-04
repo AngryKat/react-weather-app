@@ -1,18 +1,12 @@
-import { useParams, useSearchParams } from "react-router-dom";
-import CityForecast from "../components/city-forecast/city-forecast";
-import { useSelector } from "react-redux";
-import { selectCityById } from "../store/cities-reducer/selectors";
-import CityCard from "../components/city-card/city-card";
+import { Stack } from "@mui/material";
+import CityWeatherDetails from "../components/city-weather-details/index";
 
-const WeatherDetails = () => {
-  const [coords] = useSearchParams();
-  console.log('aaa ', { d: coords.get("lat") });
-
+const CityCardsGridPage = () => {
   return (
-    <>
-      {/* <CityCard id={+id!} /> */}
-      <CityForecast />
-    </>
+    <Stack alignItems="center" p={3} spacing={2} sx={{ height: "100%" }}>
+      <CityWeatherDetails />
+    </Stack>
   );
 };
-export default WeatherDetails;
+
+export default CityCardsGridPage;

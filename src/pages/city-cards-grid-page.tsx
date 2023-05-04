@@ -12,7 +12,7 @@ const CityCardsGridPage = () => {
   const handleSearch = useCallback(
     (searchValue: City | null) => {
       if (searchValue) {
-        addCityToLocalStorage(searchValue);
+        addCityToLocalStorage(searchValue.id);
         dispatch(addCity({ id: searchValue.id, cityData: searchValue }));
       }
     },

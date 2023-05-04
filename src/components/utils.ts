@@ -1,20 +1,16 @@
-import { useQuery } from "react-query";
-import { City } from "./types";
-import { getCurrentWeather } from "../api";
-
-export const addCityToLocalStorage = (city: City) => {
+export const addCityToLocalStorage = (id: number | string) => {
   const currentArray = localStorage.getItem("cities");
   const parsedArray = currentArray === null ? [] : JSON.parse(currentArray);
-  const newArray = JSON.stringify(parsedArray.concat(city));
+  const newArray = JSON.stringify(parsedArray.concat(id));
   localStorage.setItem("cities", newArray);
 };
 
-export const removeCityFromLocalStorage = (cityId: number) => {
+export const removeCityFromLocalStorage = (cityId: number | string) => {
   const currentArray = localStorage.getItem("cities");
-  const parsedArray: City[] =
+  const parsedArray: string[] =
     currentArray === null ? [] : JSON.parse(currentArray);
   const newArray = JSON.stringify(
-    parsedArray.filter(({ id }) => cityId !== id)
+    parsedArray.filter((id) => cityId !== id)
   );
   localStorage.setItem("cities", newArray);
 };

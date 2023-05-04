@@ -6,7 +6,6 @@ import { selectCitiesIds } from "../../store/cities-reducer/selectors";
 
 const CityCardsGrid = () => {
   const citiesIds = useSelector(selectCitiesIds);
-  console.log("aaa ", { citiesIds });
   if (citiesIds.length === 0) {
     return <Empty />;
   }
