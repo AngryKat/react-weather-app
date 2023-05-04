@@ -1,9 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
-  Card,
-  CardActions,
-  CardContent,
   Typography,
   Grid,
   Stack,
@@ -24,7 +21,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import dayjs from "dayjs";
 import CityCardSkeleton from "./card-skeleton";
-import CityCardError from "./card-error";
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 
 const BoldFieldValueText = ({
   fieldName,
@@ -154,95 +151,36 @@ const CityWeatherInfo = ({ currentWeather, showDetailedInfo }: any) => (
   </Stack>
 );
 
-const CityCard = ({
-  id,
+const CityCardError = ({
+  onRetry,
   gridCard = false,
 }: {
-  id: number;
+  onRetry: () => void;
   gridCard?: boolean;
 }) => {
-  const city = useAppSelector(selectCityById(id));
-  const {
-    data: currentWeather,
-    isLoading,
-    isRefetching,
-    isError,
-    refetch,
-  } = useQuery({
-    queryKey: ["currentWeather", city.coords],
-    queryFn: () => getCurrentWeather(city.coords),
-    refetchOnWindowFocus: false,
-  });
-  const dispatch = useAppDispatch();
-  const handleRetry = () => {
-    refetch();
-  };
-  if (isLoading) {
-    return <CityCardSkeleton gridCard={gridCard} />;
-  }
-  if (isError) {
-    return <CityCardError onRetry={handleRetry} gridCard />;
-  }
-
   return (
-    <Card>
-      <CardHeader
+    <Box
+      sx={{
+        width: gridCard ? "360px" : "720px",
+        height: "356px",
+        bgcolor: "#bdbdbd",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Stack
         sx={{
-          backgroundColor: "#ffa733",
-          padding: "1rem 2rem",
-          color: "#ffffff",
+          justifyContent: "center",
+          alignItems: "center",
         }}
-        title={
-          <div style={{ height: 30 }}>
-            <span>
-              {city.name}, {city.countryCode}
-            </span>
-            <span>{isRefetching && <CircularProgress size={15} />}</span>
-          </div>
-        }
-        subheader={currentWeather.weather[0].description}
-        action={
-          gridCard && (
-            <IconButton
-              aria-label="remove"
-              onClick={() => dispatch(removeCity({ id: city.id }))}
-            >
-              <ClearIcon />
-            </IconButton>
-          )
-        }
-      />
-      <CardContent sx={{ padding: "1rem" }}>
-        <CityWeatherInfo
-          currentWeather={currentWeather}
-          showDetailedInfo={!gridCard}
-        />
-      </CardContent>
-      <CardActions>
-        {gridCard ? (
-          <Link to={`/city/${city.id}`}>
-            <Button size="small" endIcon={<ArrowForwardIcon />}>
-              Details
-            </Button>
-          </Link>
-        ) : (
-          <Link to="/">
-            <Button size="small" startIcon={<ArrowBackIcon />}>
-              Return
-            </Button>
-          </Link>
-        )}
-        <Button
-          endIcon={<RefreshIcon />}
-          onClick={() => {
-            refetch();
-          }}
-        >
-          Refresh
-        </Button>
-      </CardActions>
-    </Card>
+      >
+        <SentimentVeryDissatisfiedIcon />
+        <div>Error occurred</div>
+        <Button onClick={onRetry}>Retry</Button>
+      </Stack>
+    </Box>
   );
 };
 
-export default CityCard;
+export default CityCardError;

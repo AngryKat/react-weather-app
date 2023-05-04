@@ -7,13 +7,6 @@ import { debounce } from "@mui/material/utils";
 import { getCities } from "../../api";
 import { City } from "../types";
 
-const useSearchLocationOptions = (matchSearchValue: string) =>
-  useQuery({
-    refetchOnWindowFocus: false,
-    queryKey: ["search", matchSearchValue],
-    queryFn: () => getCities(matchSearchValue),
-  });
-
 type SearchValue = City & { label: string };
 const Search = ({
   onSearch,
@@ -22,7 +15,11 @@ const Search = ({
 }) => {
   const [matchValue, setMatchValue] = useState("");
   const [finalValue, setFinalValue] = useState<SearchValue | null>(null);
-  const { data: locationOptions } = useSearchLocationOptions(matchValue);
+  const { data: locationOptions } = useQuery({
+    refetchOnWindowFocus: false,
+    queryKey: ["search", matchValue],
+    queryFn: () => getCities(matchValue),
+  });
 
   const transformedLocationOptions = locationOptions
     ? locationOptions.data.map((city) => ({
@@ -60,8 +57,7 @@ const Search = ({
       }
       onChange={(event: any, newValue: SearchValue | null) => {
         setFinalValue(newValue);
-        const { label, ...searchedCity } = newValue || {};
-        onSearch(searchedCity as City);
+        onSearch(newValue as City);
       }}
       onInputChange={handleOnInputChange}
       renderInput={(params) => (

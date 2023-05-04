@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { Suspense, useCallback } from "react";
 import { Stack } from "@mui/material";
 import Search from "../components/search-location/search-location";
 import CityCardsGrid from "../components/city-cards-grid/city-cards-grid";
@@ -20,7 +20,7 @@ const CityCardsGridPage = () => {
     [dispatch]
   );
   return (
-    <Stack alignItems="center" p={3} spacing={2} sx={{ height: "100%" }}>
+    <Stack alignItems="center" spacing={2} sx={{ height: "100%" }}>
       <Search onSearch={handleSearch} />
       <CityCardsGrid />
     </Stack>

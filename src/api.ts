@@ -50,6 +50,7 @@ export const getCity = async (id: string | number) => {
 };
 
 export const getCurrentWeather = async (coords: Coords) => {
+  console.log("aaa api", { coords });
   try {
     const { lat, lon } = coords;
     const { data } = await axios.get<any>(`${OPEN_WEATHER_API_URL}/weather`, {

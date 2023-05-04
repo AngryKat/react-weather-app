@@ -11,7 +11,7 @@ const CityCardsGrid = () => {
     return <Empty />;
   }
   return (
-    <Grid container spacing={6} alignItems="center">
+    <Grid container spacing={2} alignItems="center">
       {citiesIds.map((id) => {
         return (
           <Grid item key={id}>
