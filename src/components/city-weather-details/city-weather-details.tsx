@@ -1,36 +1,31 @@
 import { memo, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { CircularProgress } from "@mui/material";
-import { getCity, getCurrentWeather } from "../../api";
-import { useParams } from "react-router-dom";
+import { Box, CircularProgress, Stack } from "@mui/material";
+import { getCity, getCurrentWeather, getForecast } from "../../api";
+import { useLoaderData, useParams } from "react-router-dom";
+import CityCard from "../city-card/city-card";
+import { useAppSelector } from "../../store/hooks";
+import { selectCityById } from "../../store/cities/selectors";
+import { CityId } from "../types";
 
 const CityWeatherDetails = () => {
-  const [startFetch, setStartFetch] = useState(false);
-  const { id } = useParams();
-  const { data, isLoading, isError } = useQuery({
-    refetchOnWindowFocus: false,
-    queryKey: ["city", id],
-    queryFn: () => getCity(id!),
-    retry: 2,
-    enabled: !!id && startFetch,
-  });
-  const { longitude, latitude } = data?.data || {};
-  const { data: weatherData, isLoading: isWeatherDataLoading } = useQuery({
-    refetchOnWindowFocus: false,
-    queryKey: ["weather", longitude, latitude],
-    queryFn: () => getCurrentWeather(longitude!, latitude!),
-    retry: 2,
-    enabled: !!longitude && !!latitude,
-  });
+  const cityId = useLoaderData() as CityId;
+  const hello = useAppSelector(selectCityById(cityId));
 
-  // Due to API restrictions, postpone a city fetching
-  useEffect(() => {
-    const timer = setTimeout(() => setStartFetch(true), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-  if (isLoading) return <CircularProgress />;
-  if (isError) return <>Ooops</>;
-  return <>Hello</>;
+  // const [lat, lon] = coords.split(" ");
+  // const { data: forecastData, isLoading } = useQuery({
+  //   queryKey: ["forecast", lat, lon],
+  //   queryFn: () => getForecast(lat!, lon!),
+  //   retry: 2,
+  //   enabled: !!lat && !!lon,
+  //   refetchOnWindowFocus: false,
+  // });
+  return (
+    <Stack direction="row">
+      <CityCard id={cityId} />
+      {/* {!isLoading && <>Forecast</>} */}
+    </Stack>
+  );
 };
 
 export default memo(CityWeatherDetails);

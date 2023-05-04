@@ -1,25 +1,36 @@
-import { Container, CssBaseline } from "@mui/material";
-import CityCardsGridPage from "./pages/city-cards-grid-page";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { CircularProgress, Container, CssBaseline } from "@mui/material";
 
 import "./App.css";
 
-import { Provider } from "react-redux";
-import { store } from "./store";
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useAppSelector, useThunkDispatch } from "./store/hooks";
+import { useEffect } from "react";
+import { fetchAddedCities } from "./store/cities/thunks";
+import { selectCitiesFetchStatus } from "./store/cities/selectors";
+import { FetchStatus } from "./store/cities";
 
-const queryClient = new QueryClient();
+export const CitiesFetcher = ({ children }: any) => {
+  const citiesFetchStatus = useAppSelector(selectCitiesFetchStatus);
+  const dispatch = useThunkDispatch();
+
+  useEffect(() => {
+    if (citiesFetchStatus === FetchStatus.idle) {
+      dispatch(fetchAddedCities());
+    }
+  }, [dispatch, citiesFetchStatus]);
+  if (citiesFetchStatus === FetchStatus.succeeded) {
+    return <>{children}</>;
+  }
+  return <CircularProgress />;
+};
 
 function App() {
   return (
     <>
-      {/* <QueryClientProvider client={queryClient}> */}
-        <CssBaseline />
-        <Container sx={{ height: "100%" }}>
-          <Outlet />
-        </Container>
-      {/* </QueryClientProvider> */}
+      <CssBaseline />
+      <Container sx={{ height: "100%" }}>
+        <Outlet />
+      </Container>
     </>
   );
 }

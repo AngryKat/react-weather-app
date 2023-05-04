@@ -3,7 +3,10 @@ import { City } from "../../components/types";
 import { CitiesState } from ".";
 
 const reducers = {
-  addCity: (state: CitiesState, action: PayloadAction<{ id: number; cityData: City }>) => {
+  addCity: (
+    state: CitiesState,
+    action: PayloadAction<{ id: number; cityData: City }>
+  ) => {
     const {
       payload: { id, cityData },
     } = action;
@@ -20,4 +23,5 @@ const reducers = {
     delete state[removedId];
   },
 };
+
 export default reducers;

@@ -5,14 +5,15 @@ import CityCardsGrid from "../components/city-cards-grid/city-cards-grid";
 import { City } from "../components/types";
 import { addCityToLocalStorage } from "../components/utils";
 import { useDispatch } from "react-redux";
-import { addCity } from "../store/cities-reducer/actions";
+import { addCity } from "../store/cities/actions";
 
 const CityCardsGridPage = () => {
   const dispatch = useDispatch();
   const handleSearch = useCallback(
     (searchValue: City | null) => {
       if (searchValue) {
-        addCityToLocalStorage(searchValue.id);
+        console.log("aaa ", { searchValue });
+        addCityToLocalStorage(searchValue);
         dispatch(addCity({ id: searchValue.id, cityData: searchValue }));
       }
     },
