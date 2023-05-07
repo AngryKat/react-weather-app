@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { City } from "../../components/types";
+import { City } from "../../types";
 
 export const fetchAddedCities = createAsyncThunk<City[]>(
   "addedCities/fetchAddedCities",

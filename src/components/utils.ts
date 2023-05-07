@@ -1,17 +1,26 @@
-import { City } from "./types";
+import { City } from "../types";
 
 export const addCityToLocalStorage = (city: City) => {
-  const currentArray = localStorage.getItem("cities");
-  const parsedArray: City[] =
-    currentArray === null ? [] : JSON.parse(currentArray);
-  if (!!parsedArray.find((item) => item.id === city.id)) return;
-  localStorage.setItem("cities", JSON.stringify([...parsedArray, city]));
+  const currentArray: City[] = JSON.parse(
+    localStorage.getItem("cities") || "[]"
+  );
+  if (currentArray.some((item) => item.id === city.id)) return;
+  const updatedArray = [city, ...currentArray];
+  localStorage.setItem("cities", JSON.stringify(updatedArray));
 };
 
 export const removeCityFromLocalStorage = (id: number | string) => {
-  const currentArray = localStorage.getItem("cities");
-  const parsedArray: City[] =
-    currentArray === null ? [] : JSON.parse(currentArray);
-  const newArray = JSON.stringify(parsedArray.filter((item) => id !== item.id));
+  const currentArray: City[] = JSON.parse(
+    localStorage.getItem("cities") || "[]"
+  );
+  const newArray = JSON.stringify(
+    currentArray.filter((item) => item.id !== id)
+  );
   localStorage.setItem("cities", newArray);
 };
+
+export function invariant(value: unknown): asserts value {
+  if (value) return;
+
+  throw new Error("Invariant violation");
+}

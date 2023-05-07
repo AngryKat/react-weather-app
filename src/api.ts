@@ -1,11 +1,36 @@
-import axios from "axios";
-import { Coords } from "./components/types";
+import axios, { AxiosInstance } from "axios";
+import { Coords } from "./types";
 
-const GEO_DB_API_KEY = "a38df4ccbbmsh7b9e682ab5d83d9p1992e8jsn5af3d4d3511e";
-const GEO_DB_API_URL = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities";
-const OPEN_WEATHER_API_URL = "https://api.openweathermap.org/data/2.5";
-const OPEN_WEATHER_API_KEY = "66945ce441b315bf9cef041cd56daeb3";
+const geoDBApiKey = process.env.REACT_APP_GEO_DB_API_KEY;
+const geoDBApiUrl = process.env.REACT_APP_GEO_DB_API_URL;
+const openWeatherApiKey = process.env.REACT_APP_OPEN_WEATHER_API_KEY;
+const openWeatherApiUrl = process.env.REACT_APP_OPEN_WEATHER_API_URL;
 
+console.log("aaa ", {
+  geoDBApiKey,
+  geoDBApiUrl,
+  openWeatherApiKey,
+  openWeatherApiUrl,
+});
+
+if (!geoDBApiKey || !geoDBApiUrl || !openWeatherApiKey || !openWeatherApiUrl) {
+  throw new Error("Missing API keys or URLs");
+}
+
+const geoDBApi: AxiosInstance = axios.create({
+  baseURL: geoDBApiUrl,
+  headers: {
+    "X-RapidAPI-Key": geoDBApiKey,
+    "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
+  },
+});
+
+const openWeatherApi: AxiosInstance = axios.create({
+  baseURL: openWeatherApiUrl,
+  params: {
+    appid: openWeatherApiKey,
+  },
+});
 export interface CityGeoDB {
   id: number;
   name: string;
@@ -17,69 +42,61 @@ export interface CityGeoDB {
 type CitiesResponse = { data: CityGeoDB[] };
 type CityResponse = { data: CityGeoDB };
 
-export const getCities = async (namePrefix?: string) => {
+export const getCities = async (namePrefix?: string): Promise<CityGeoDB[]> => {
   try {
-    const { data } = await axios.get<CitiesResponse>(GEO_DB_API_URL, {
-      headers: {
-        "X-RapidAPI-Key": GEO_DB_API_KEY,
-        "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
-      },
+    const { data } = await geoDBApi.get<CitiesResponse>("/cities", {
       params: {
         minPopulation: "150000",
         namePrefix,
       },
     });
-    return data || [];
+    return data.data || [];
   } catch (error) {
     console.error(error);
+    return Promise.reject(error);
   }
 };
 
-export const getCity = async (id: string | number) => {
+export const getCity = async (id: string | number): Promise<CityGeoDB> => {
   try {
-    const { data } = await axios.get<CityResponse>(`${GEO_DB_API_URL}/${id}`, {
-      headers: {
-        "X-RapidAPI-Key": GEO_DB_API_KEY,
-        "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
-      },
-    });
-    return data || {};
+    const { data } = await geoDBApi.get<CityResponse>(`/cities/${id}`);
+    return data.data || {};
   } catch (error) {
     console.error(error);
+    return Promise.reject(error);
   }
 };
 
 export const getCurrentWeather = async (coords: Coords) => {
-  console.log("aaa api", { coords });
   try {
     const { lat, lon } = coords;
-    const { data } = await axios.get<any>(`${OPEN_WEATHER_API_URL}/weather`, {
+    const { data } = await openWeatherApi.get<any>("/weather", {
       params: {
         lat,
         lon,
-        appid: OPEN_WEATHER_API_KEY,
         units: "metric",
       },
     });
     return data;
   } catch (error) {
     console.error(error);
+    return Promise.reject(error);
   }
 };
 export const getForecast = async (coords: Coords) => {
   try {
     const { lat, lon } = coords;
-    const { data } = await axios.get<any>(`${OPEN_WEATHER_API_URL}/forecast`, {
+    const { data } = await openWeatherApi.get<any>("/forecast", {
       params: {
         lat,
         lon,
-        appid: OPEN_WEATHER_API_KEY,
         units: "metric",
-        cnt: 3,
+        cnt: 5,
       },
     });
     return data;
   } catch (error) {
     console.error(error);
+    return Promise.reject(error);
   }
 };

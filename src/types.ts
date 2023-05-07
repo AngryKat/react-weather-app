@@ -9,3 +9,10 @@ export interface City {
   countryCode: string;
   coords: Coords;
 }
+
+export enum FetchStatus {
+  "idle",
+  "loading",
+  "succeeded",
+  "failed",
+}

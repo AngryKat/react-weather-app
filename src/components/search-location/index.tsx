@@ -1,13 +1,16 @@
-import { useState, memo } from "react";
+import { useState, memo, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CircularProgress } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { debounce } from "@mui/material/utils";
 import { getCities } from "../../api";
-import { City } from "../types";
+import { City } from "../../types";
 
 type SearchValue = City & { label: string };
+
+const filterOptions = createFilterOptions<SearchValue>({ limit: 10 });
+
 const Search = ({
   onSearch,
 }: {
@@ -15,14 +18,14 @@ const Search = ({
 }) => {
   const [matchValue, setMatchValue] = useState("");
   const [finalValue, setFinalValue] = useState<SearchValue | null>(null);
-  const { data: locationOptions } = useQuery({
-    refetchOnWindowFocus: false,
+  const { data: locationOptions, isFetching } = useQuery({
     queryKey: ["search", matchValue],
     queryFn: () => getCities(matchValue),
+    refetchOnWindowFocus: false,
   });
 
   const transformedLocationOptions = locationOptions
-    ? locationOptions.data.map((city) => ({
+    ? locationOptions.map((city) => ({
         id: city.id,
         label: `${city.name}, ${city.countryCode}`,
         name: city.name,
@@ -40,7 +43,7 @@ const Search = ({
     <Autocomplete
       id="search-locations"
       sx={{ width: 300 }}
-      filterOptions={(x) => x}
+      filterOptions={filterOptions}
       getOptionLabel={(option) => option.label}
       options={transformedLocationOptions}
       isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -49,7 +52,7 @@ const Search = ({
       filterSelectedOptions
       value={finalValue}
       noOptionsText={
-        !locationOptions ? (
+        isFetching ? (
           <CircularProgress color="inherit" size={20} />
         ) : (
           "No location found"

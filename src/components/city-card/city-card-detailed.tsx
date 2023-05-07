@@ -9,48 +9,53 @@ import {
   Stack,
   CircularProgress,
   CardHeader,
-  IconButton,
+
 } from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ClearIcon from "@mui/icons-material/Clear";
+
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { getCurrentWeather } from "../../api";
-import { selectCityById } from "../../store/cities/selectors";
-import { removeCity } from "../../store/cities/actions";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CityCardSkeleton from "./card-skeleton";
 import CityCardError from "./card-error";
+import { selectCityById } from "../../store/cities/selectors";
+import { useAppSelector } from "../../store/hooks";
 import WeatherInfo from "./common/weather-info";
-import { BoldFieldValueText } from "./common/bold-field-value-text";
+import ForecastChart from "./forecast-chart";
 import RefreshButton from "./common/refresh-button";
+import { BoldFieldValueText } from "./common/bold-field-value-text";
 import { CityId } from "../../types";
 
-const CityCard = ({ id }: { id: CityId }) => {
+const CityCardDetailed = ({ id }: { id: CityId }) => {
   const city = useAppSelector(selectCityById(id));
   const {
-    data: currentWeather,
+    data: currentWeatherData,
     isLoading: isWeatherLoading,
-    isRefetching,
     isError: isWeatherError,
+    isRefetching,
     refetch,
   } = useQuery({
-    queryKey: ["currentWeather", city!.coords],
+    queryKey: ["currentWeather", city?.coords],
     queryFn: () => getCurrentWeather(city!.coords),
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
     enabled: !!city,
   });
-  const dispatch = useAppDispatch();
+
   const handleRetry = () => {
     refetch();
   };
 
-  if (isWeatherLoading) {
-    return <CityCardSkeleton gridCard />;
+  if (!city || isWeatherLoading) {
+    return <CityCardSkeleton />;
   }
   if (isWeatherError) {
-    return <CityCardError onRetry={handleRetry} gridCard />;
+    return <CityCardError onRetry={handleRetry} />;
   }
-
+  const { name, countryCode, coords } = city;
+  const {
+    weather: [{ description, icon }],
+    main: { temp, feels_like },
+  } = currentWeatherData;
   return (
     <Card>
       <CardHeader
@@ -62,20 +67,12 @@ const CityCard = ({ id }: { id: CityId }) => {
         title={
           <div style={{ height: 30 }}>
             <span>
-              {city.name}, {city.countryCode}
+              {name}, {countryCode}
             </span>
             <span>{isRefetching && <CircularProgress size={15} />}</span>
           </div>
         }
-        subheader={currentWeather.weather[0].description}
-        action={
-          <IconButton
-            aria-label="remove"
-            onClick={() => dispatch(removeCity({ id }))}
-          >
-            <ClearIcon />
-          </IconButton>
-        }
+        subheader={description}
       />
       <CardContent>
         <Stack p={1} spacing={4}>
@@ -85,28 +82,27 @@ const CityCard = ({ id }: { id: CityId }) => {
                 <img
                   width={60}
                   height={60}
-                  alt={`weather icon for ${currentWeather.weather[0].description}`}
-                  src={`http://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png`}
+                  alt={`weather icon for ${description}`}
+                  src={`http://openweathermap.org/img/w/${icon}.png`}
                 />
                 <div>
-                  <Typography variant="h4">
-                    {currentWeather.main.temp.toFixed()}°C
-                  </Typography>
+                  <Typography variant="h4">{temp.toFixed()}°C</Typography>
                   <BoldFieldValueText
                     fieldName="Feels like"
-                    fieldValue={`${currentWeather.main.feels_like.toFixed()}°C`}
+                    fieldValue={`${feels_like.toFixed()}°C`}
                   />
                 </div>
               </Stack>
             </Grid>
           </Grid>
-          <WeatherInfo currentWeather={currentWeather} />
+          <WeatherInfo currentWeather={currentWeatherData} detailed />
+          <ForecastChart coords={coords} />
         </Stack>
       </CardContent>
       <CardActions>
-        <Link to={`/city/${id}`}>
-          <Button size="small" endIcon={<ArrowForwardIcon />}>
-            Details
+        <Link to="/">
+          <Button size="small" startIcon={<ArrowBackIcon />}>
+            Return
           </Button>
         </Link>
         <RefreshButton onRefresh={handleRetry} />
@@ -115,4 +111,4 @@ const CityCard = ({ id }: { id: CityId }) => {
   );
 };
 
-export default CityCard;
+export default CityCardDetailed;

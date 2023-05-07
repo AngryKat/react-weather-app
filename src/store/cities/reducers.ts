@@ -1,5 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { City } from "../../components/types";
+import { City } from "../../types";
 import { CitiesState } from ".";
 
 const reducers = {
@@ -12,7 +12,7 @@ const reducers = {
     } = action;
     if (state[id]) return;
     state[id] = cityData;
-    state.allIds.push(id);
+    state.allIds.splice(0, 0, id);
   },
   removeCity: (state: CitiesState, action: PayloadAction<{ id: number }>) => {
     const {

@@ -1,6 +1,6 @@
 import { createDraftSafeSelector } from "@reduxjs/toolkit";
 import { RootState } from "..";
-import { CityId } from "../../components/types";
+import { CityId } from "../../types";
 
 export const selectSlice = (state: RootState) => {
   return state.cities;

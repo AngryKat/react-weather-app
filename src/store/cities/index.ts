@@ -1,14 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { City } from "../../components/types";
 import reducers from "./reducers";
 import { fetchAddedCities } from "./thunks";
-
-export enum FetchStatus {
-  "idle",
-  "loading",
-  "succeeded",
-  "failed",
-}
+import { City, FetchStatus } from "../../types";
 
 export interface CitiesState {
   [id: number]: City;
