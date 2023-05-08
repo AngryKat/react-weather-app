@@ -9,14 +9,19 @@ import {
   IconButton,
   Divider,
   Skeleton,
+  Box,
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ClearIcon from "@mui/icons-material/Clear";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-export const CityWeatherInfoSkeleton = ({ showDetailedInfo = false }: { showDetailedInfo?: boolean }) => (
-  <Stack spacing={4} sx={{ paddingRight: 2, paddingLeft: 1, paddingTop: 2 }}>
+export const CityWeatherInfoSkeleton = ({
+  showDetailedInfo = false,
+}: {
+  showDetailedInfo?: boolean;
+}) => (
+  <Stack p={1} spacing={4}>
     <Grid container>
       <Grid item>
         <Stack direction="row" spacing={1}>
@@ -86,8 +91,10 @@ const CityCardSkeleton = ({ gridCard = false }: { gridCard?: boolean }) => {
           </>
         }
       />
-      <CardContent sx={{ padding: "1rem" }}>
-        <CityWeatherInfoSkeleton showDetailedInfo={!gridCard} />
+      <CardContent>
+        <Box p={1}>
+          <CityWeatherInfoSkeleton showDetailedInfo={!gridCard} />
+        </Box>
       </CardContent>
       <CardActions>
         {gridCard ? (
