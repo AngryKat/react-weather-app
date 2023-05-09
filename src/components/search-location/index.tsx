@@ -1,11 +1,11 @@
-import { useState, memo, useMemo } from "react";
+import { useState, memo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CircularProgress } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { debounce } from "@mui/material/utils";
-import { getCities } from "../../api";
-import { City } from "../../types";
+import { getCities } from "../../utils/api";
+import { City } from "../../utils/types";
 
 type SearchValue = City & { label: string };
 
@@ -22,6 +22,7 @@ const Search = ({
     queryKey: ["search", matchValue],
     queryFn: () => getCities(matchValue),
     refetchOnWindowFocus: false,
+    enabled: !!matchValue,
   });
 
   const transformedLocationOptions = locationOptions
@@ -34,11 +35,16 @@ const Search = ({
       }))
     : [];
 
-  const handleOnInputChange = debounce((event, newInputValue) => {
+  // debounce to smooth API restriction for calls per second
+  const handleInputChange = debounce((event, newInputValue) => {
     const [cityName] = newInputValue.split(",");
     setMatchValue(cityName);
   }, 1100);
 
+  const handleChange = (event: any, newValue: SearchValue | null) => {
+    setFinalValue(newValue);
+    onSearch(newValue as City);
+  };
   return (
     <Autocomplete
       id="search-locations"
@@ -58,11 +64,8 @@ const Search = ({
           "No location found"
         )
       }
-      onChange={(event: any, newValue: SearchValue | null) => {
-        setFinalValue(newValue);
-        onSearch(newValue as City);
-      }}
-      onInputChange={handleOnInputChange}
+      onChange={handleChange}
+      onInputChange={handleInputChange}
       renderInput={(params) => (
         <TextField {...params} label="Add a location" fullWidth />
       )}

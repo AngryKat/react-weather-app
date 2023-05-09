@@ -6,22 +6,23 @@ import { useAppSelector } from "../../store/hooks";
 
 const CityCardsGrid = () => {
   const citiesIds = useAppSelector(selectCitiesIds);
-
-  if (citiesIds.length === 0) {
-    return <Empty />;
-  }
   return (
     <Grid
+      data-testid="city-cards-grid"
       container
       rowSpacing={{ xs: 1, sm: 2 }}
       columnSpacing={{ xs: 1, sm: 2 }}
       alignItems="center"
     >
-      {citiesIds.map((id) => (
-        <Grid item key={id}>
-          <CityCard id={id} />
-        </Grid>
-      ))}
+      {citiesIds.length === 0 ? (
+        <Empty />
+      ) : (
+        citiesIds.map((id) => (
+          <Grid item key={id}>
+            <CityCard id={id} />
+          </Grid>
+        ))
+      )}
     </Grid>
   );
 };
