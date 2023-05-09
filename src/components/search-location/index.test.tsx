@@ -33,4 +33,22 @@ describe("Search component", () => {
     (getCities as jest.Mock).mockResolvedValueOnce([]);
     expect(screen.getByText("No location found")).toBeInTheDocument();
   });
+  it("should show transformed label of a found option", async () => {
+    const mockOption = {
+      id: 3520102,
+      name: "Kyiv",
+      countryCode: "UA",
+      latitude: 50.45,
+      longitude: 30.523611111,
+    };
+    (getCities as jest.Mock).mockImplementationOnce(() => [mockOption]);
+    const user = userEvent.setup();
+    renderWithClient(queryClient, <SearchLocation onSearch={() => {}} />);
+    const searchInput = screen.getByLabelText("Add a location");
+    await user.click(searchInput);
+    await user.type(searchInput, "Kyiv");
+    expect(
+      await screen.findByText("Kyiv, UA", {}, { timeout: 2000 })
+    ).toBeInTheDocument();
+  });
 });
