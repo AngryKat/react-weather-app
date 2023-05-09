@@ -6,17 +6,17 @@ import { QueryClient } from "@tanstack/react-query";
 import userEvent from "@testing-library/user-event";
 import { getCities } from "../../utils/api";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-    },
-  },
-});
-
 jest.mock("../../utils/api");
 
 describe("Search component", () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
