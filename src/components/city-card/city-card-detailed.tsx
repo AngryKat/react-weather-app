@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { getCurrentWeather } from "../../api";
+import { getCurrentWeather } from "../../utils/api";
 import { Link } from "react-router-dom";
 import CityCardSkeleton from "./card-skeleton";
 import CityCardError from "./card-error";
@@ -23,7 +23,7 @@ import WeatherInfo from "./common/weather-info";
 import ForecastChart from "./forecast-chart";
 import RefreshButton from "./common/refresh-button";
 import { BoldFieldValueText } from "./common/bold-field-value-text";
-import { CityId } from "../../types";
+import { CityId } from "../../utils/types";
 
 const CityCardDetailed = ({ id }: { id: CityId }) => {
   const city = useAppSelector(selectCityById(id));

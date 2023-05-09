@@ -16,3 +16,11 @@ export enum FetchStatus {
   "succeeded",
   "failed",
 }
+
+export interface CityGeoDB {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  countryCode: string;
+}

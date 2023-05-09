@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { invariant } from "../components/utils";
+import { invariant } from "../utils";
 import CityCardDetailed from "../components/city-card/city-card-detailed";
 
 const CityWeatherDetailsPage = () => {

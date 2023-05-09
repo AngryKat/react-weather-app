@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ClearIcon from "@mui/icons-material/Clear";
-import { getCurrentWeather } from "../../api";
+import { getCurrentWeather } from "../../utils/api";
 import { selectCityById } from "../../store/cities/selectors";
 import { removeCity } from "../../store/cities/actions";
 import { Link } from "react-router-dom";
@@ -23,7 +23,8 @@ import CityCardError from "./card-error";
 import WeatherInfo from "./common/weather-info";
 import { BoldFieldValueText } from "./common/bold-field-value-text";
 import RefreshButton from "./common/refresh-button";
-import { CityId } from "../../types";
+import { removeCityFromLocalStorage } from "../../utils";
+import { CityId } from "../../utils/types";
 
 const CityCard = ({ id }: { id: CityId }) => {
   const city = useAppSelector(selectCityById(id));
@@ -42,6 +43,11 @@ const CityCard = ({ id }: { id: CityId }) => {
   const dispatch = useAppDispatch();
   const handleRetry = () => {
     refetch();
+  };
+
+  const handleRemove = () => {
+    dispatch(removeCity({ id }));
+    removeCityFromLocalStorage(id);
   };
 
   if (isWeatherLoading) {
@@ -69,10 +75,7 @@ const CityCard = ({ id }: { id: CityId }) => {
         }
         subheader={currentWeather.weather[0].description}
         action={
-          <IconButton
-            aria-label="remove"
-            onClick={() => dispatch(removeCity({ id }))}
-          >
+          <IconButton aria-label="remove" onClick={handleRemove} data-testid={`clear-button-${id}`}>
             <ClearIcon />
           </IconButton>
         }

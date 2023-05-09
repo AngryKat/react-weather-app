@@ -1,17 +1,10 @@
 import axios, { AxiosInstance } from "axios";
-import { Coords } from "./types";
+import { CityGeoDB, Coords } from "./types";
 
 const geoDBApiKey = process.env.REACT_APP_GEO_DB_API_KEY;
 const geoDBApiUrl = process.env.REACT_APP_GEO_DB_API_URL;
 const openWeatherApiKey = process.env.REACT_APP_OPEN_WEATHER_API_KEY;
 const openWeatherApiUrl = process.env.REACT_APP_OPEN_WEATHER_API_URL;
-
-console.log("aaa ", {
-  geoDBApiKey,
-  geoDBApiUrl,
-  openWeatherApiKey,
-  openWeatherApiUrl,
-});
 
 if (!geoDBApiKey || !geoDBApiUrl || !openWeatherApiKey || !openWeatherApiUrl) {
   throw new Error("Missing API keys or URLs");
@@ -31,13 +24,7 @@ const openWeatherApi: AxiosInstance = axios.create({
     appid: openWeatherApiKey,
   },
 });
-export interface CityGeoDB {
-  id: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  countryCode: string;
-}
+
 
 type CitiesResponse = { data: CityGeoDB[] };
 type CityResponse = { data: CityGeoDB };
@@ -77,7 +64,7 @@ export const getCurrentWeather = async (coords: Coords) => {
         units: "metric",
       },
     });
-    return data;
+    return data || {};
   } catch (error) {
     console.error(error);
     return Promise.reject(error);

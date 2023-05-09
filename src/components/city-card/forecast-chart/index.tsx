@@ -3,8 +3,8 @@ import { Box, CircularProgress } from "@mui/material";
 import { Area, AreaChart, Tooltip, XAxis, YAxis } from "recharts";
 
 import ForecastChartError from "./forecast-chart-error";
-import { getForecast } from "../../../api";
-import { Coords } from "../../../types";
+import { getForecast } from "../../../utils/api";
+import { Coords } from "../../../utils/types";
 
 const transformData = (data: any[]) => {
   return data.map((item) => {

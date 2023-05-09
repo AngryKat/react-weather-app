@@ -1,4 +1,4 @@
-import { City } from "../types";
+import { City } from "./types";
 
 export const addCityToLocalStorage = (city: City) => {
   const currentArray: City[] = JSON.parse(

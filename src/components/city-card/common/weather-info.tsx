@@ -31,8 +31,8 @@ const getDetailedWeatherInfoItemsList = (weatherData: any) => {
   } = weatherData;
   return [
     [
-      { fieldName: "Min", fieldValue: `${temp_min}°C` },
-      { fieldName: "Max", fieldValue: `${temp_max}°C` },
+      { fieldName: "Min", fieldValue: `${temp_min.toFixed()}°C` },
+      { fieldName: "Max", fieldValue: `${temp_max.toFixed()}°C` },
     ],
     [
       {

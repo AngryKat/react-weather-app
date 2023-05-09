@@ -1,5 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { City } from "../../types";
+import { City } from "../../utils/types";
 import { CitiesState } from ".";
 
 const reducers = {
