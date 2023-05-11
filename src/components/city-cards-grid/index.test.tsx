@@ -8,6 +8,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import { FetchStatus } from "../../utils/types";
 
 describe("CityCardsGrid", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {

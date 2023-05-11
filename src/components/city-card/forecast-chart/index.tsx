@@ -6,6 +6,8 @@ import ForecastChartError from "./forecast-chart-error";
 import { getForecast } from "../../../utils/api";
 import { Coords } from "../../../utils/types";
 
+const MAX_TEMP_OFFSET = 10;
+
 const transformData = (data: any[]) => {
   return data.map((item) => {
     const {
@@ -21,11 +23,7 @@ const transformData = (data: any[]) => {
   });
 };
 
-const ForecastChart = ({
-  coords,
-}: {
-  coords: Coords;
-}) => {
+const ForecastChart = ({ coords }: { coords: Coords }) => {
   const {
     data: forecastData,
     isLoading,
@@ -64,6 +62,7 @@ const ForecastChart = ({
 
   return (
     <AreaChart
+      data-testid="forecast-chart"
       width={730}
       height={250}
       data={transformedForecastData}
@@ -80,7 +79,7 @@ const ForecastChart = ({
         hide
         domain={[
           (dataMin: number) => Math.min(dataMin, 0),
-          (dataMax: number) => dataMax + 5,
+          (dataMax: number) => dataMax + MAX_TEMP_OFFSET,
         ]}
         allowDataOverflow
       />

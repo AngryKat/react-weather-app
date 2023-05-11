@@ -12,6 +12,9 @@ import { getCities, getCurrentWeather } from "../../utils/api";
 jest.mock("../../utils/api");
 
 describe("CityCardsGridPage", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -33,48 +36,23 @@ describe("CityCardsGridPage", () => {
       longitude: 30.523611111,
     };
     const mockWeather = {
-      coord: {
-        lon: 30.5241,
-        lat: 50.45,
-      },
       weather: [
         {
-          id: 804,
           main: "Clouds",
           description: "overcast clouds",
           icon: "04d",
         },
       ],
-      base: "stations",
       main: {
         temp: 11.22,
         feels_like: 9.47,
-        temp_min: 11.22,
-        temp_max: 11.22,
         pressure: 1028,
         humidity: 41,
-        sea_level: 1028,
-        grnd_level: 1008,
       },
       visibility: 10000,
       wind: {
         speed: 4.44,
-        deg: 49,
-        gust: 5.4,
       },
-      clouds: {
-        all: 93,
-      },
-      dt: 1683627488,
-      sys: {
-        country: "UA",
-        sunrise: 1683598805,
-        sunset: 1683653320,
-      },
-      timezone: 10800,
-      id: 696050,
-      name: "Pushcha-Vodytsya",
-      cod: 200,
     };
 
     const mockStoreInitData = {
@@ -107,48 +85,24 @@ describe("CityCardsGridPage", () => {
   });
   it("should remove city card from the grid when click clear button", async () => {
     const mockWeather = {
-      coord: {
-        lon: 30.5241,
-        lat: 50.45,
-      },
       weather: [
         {
-          id: 804,
           main: "Clouds",
           description: "overcast clouds",
           icon: "04d",
         },
       ],
-      base: "stations",
       main: {
         temp: 11.22,
         feels_like: 9.47,
-        temp_min: 11.22,
-        temp_max: 11.22,
+
         pressure: 1028,
         humidity: 41,
-        sea_level: 1028,
-        grnd_level: 1008,
       },
       visibility: 10000,
       wind: {
         speed: 4.44,
-        deg: 49,
-        gust: 5.4,
       },
-      clouds: {
-        all: 93,
-      },
-      dt: 1683627488,
-      sys: {
-        country: "UA",
-        sunrise: 1683598805,
-        sunset: 1683653320,
-      },
-      timezone: 10800,
-      id: 696050,
-      name: "Pushcha-Vodytsya",
-      cod: 200,
     };
 
     const mockStoreInitData = {
@@ -179,7 +133,7 @@ describe("CityCardsGridPage", () => {
       store: reduxStore,
       client: queryClient,
     });
-    const clearIcon = screen.getByTestId("clear-button-3520102")
+    const clearIcon = screen.getByTestId("clear-button-3520102");
     await user.click(clearIcon);
     expect(screen.getByText("No cities yet :c")).toBeInTheDocument();
   });

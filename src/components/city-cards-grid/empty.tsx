@@ -5,7 +5,8 @@ const Empty = () => (
     sx={{
       display: "flex",
       flexDirection: "column",
-      height: "100%",
+      height: "100vh",
+      width: 1,
       justifyContent: "center",
       alignItems: "center",
     }}

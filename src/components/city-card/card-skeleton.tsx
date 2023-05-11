@@ -72,7 +72,7 @@ export const CityWeatherInfoSkeleton = ({
 
 const CityCardSkeleton = ({ gridCard = false }: { gridCard?: boolean }) => {
   return (
-    <Card sx={{ width: gridCard ? "360px" : "720px" }}>
+    <Card sx={{ width: gridCard ? "360px" : "720px" }} data-testid="city-card-skeleton">
       <CardHeader
         sx={{
           backgroundColor: "#ffa733",
