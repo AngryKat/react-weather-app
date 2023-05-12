@@ -7,8 +7,6 @@ import { store } from "../../store";
 import { QueryClient } from "@tanstack/react-query";
 import { screen } from "@testing-library/react";
 import * as api from "../../utils/api";
-import userEvent from "@testing-library/user-event";
-import CityCardDetailed from "./city-card-detailed";
 
 jest.mock("../../utils/api", () => ({
   getCurrentWeather: jest.fn(),

@@ -18,11 +18,13 @@ describe("Search component", () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
   it("should render without errors", () => {
     renderWithClient(queryClient, <SearchLocation onSearch={() => {}} />);
-    expect(screen.getByLabelText("Add a location")).toBeInTheDocument();
+    expect(
+      screen.getByRole("combobox", { name: "Add a location" })
+    ).toBeInTheDocument();
   });
   it("should show No location found when options are empty", async () => {
     const user = userEvent.setup();

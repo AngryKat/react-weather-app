@@ -10,6 +10,8 @@ code {
     monospace;
 }
 
-html, body, #root {
-  height: 100%;
+html,
+body,
+#root {
+  min-height: "100%",
 }

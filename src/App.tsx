@@ -1,11 +1,11 @@
 import { Container, styled } from "@mui/material";
+import { Outlet } from "react-router-dom";
 
 import "./App.css";
 
-import { Outlet } from "react-router-dom";
 
 const AppContainer = styled(Container)({
-  height: "100%",
+  minHeight: "100%",
   padding: "1rem",
   justifyContent: "center",
 });

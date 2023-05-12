@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import {
   Button,
   Card,
@@ -16,7 +17,6 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { getCurrentWeather } from "../../utils/api";
 import { selectCityById } from "../../store/cities/selectors";
 import { removeCity } from "../../store/cities/actions";
-import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CityCardSkeleton from "./card-skeleton";
 import CityCardError from "./card-error";
