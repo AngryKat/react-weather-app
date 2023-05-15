@@ -12,14 +12,19 @@ import { getCities, getCurrentWeather } from "../../utils/api";
 jest.mock("../../utils/api");
 
 describe("CityCardsGridPage", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
+  beforeEach(() => {
+    jest.resetAllMocks();
   });
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         retry: false,
       },
+    },
+    logger: {
+      log: console.log,
+      warn: console.warn,
+      error: () => {},
     },
   });
   it("should render Search and CityCardsGrid components", () => {

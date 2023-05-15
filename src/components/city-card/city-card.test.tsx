@@ -15,7 +15,6 @@ jest.mock("../../utils/api", () => ({
 describe("CityCard", () => {
   beforeEach(() => {
     jest.resetAllMocks();
-    jest.clearAllMocks();
   });
   const mockWeather = {
     weather: [
@@ -60,6 +59,11 @@ describe("CityCard", () => {
         retry: false,
       },
     },
+    logger: {
+      log: console.log,
+      warn: console.warn,
+      error: () => {},
+    },
   });
 
   const reduxStore: typeof store = configureStore({
@@ -101,6 +105,11 @@ describe("CityCard", () => {
             retry: false,
           },
         },
+        logger: {
+          log: console.log,
+          warn: console.warn,
+          error: () => {},
+        },
       });
 
       const reduxStore: typeof store = configureStore({
@@ -127,6 +136,11 @@ describe("CityCard", () => {
           queries: {
             retry: false,
           },
+        },
+        logger: {
+          log: console.log,
+          warn: console.warn,
+          error: () => {},
         },
       });
 

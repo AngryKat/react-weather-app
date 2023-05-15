@@ -9,17 +9,22 @@ import { getCities } from "../../utils/api";
 jest.mock("../../utils/api");
 
 describe("Search component", () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         retry: false,
       },
     },
+    logger: {
+      log: console.log,
+      warn: console.warn,
+      error: () => {},
+    },
   });
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
   it("should render without errors", () => {
     renderWithClient(queryClient, <SearchLocation onSearch={() => {}} />);
     expect(
