@@ -19,7 +19,7 @@ import { selectCityById } from "../../store/cities/selectors";
 import { removeCity } from "../../store/cities/actions";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CityCardSkeleton from "./card-skeleton";
-import CityCardError from "./card-error";
+import CityCardError from "./card-fetch-error";
 import WeatherInfo from "./common/weather-info";
 import { BoldFieldValueText } from "./common/bold-field-value-text";
 import RefreshButton from "./common/refresh-button";

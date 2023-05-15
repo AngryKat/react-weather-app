@@ -15,16 +15,21 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { getCurrentWeather } from "../../../utils/api";
 import { Link } from "react-router-dom";
 import CityCardSkeleton from "../card-skeleton";
-import CityCardError from "../card-error";
-import { selectCityById } from "../../../store/cities/selectors";
+import CityCardError from "../card-fetch-error";
+import {
+  selectCityById,
+  selectCityExists,
+} from "../../../store/cities/selectors";
 import { useAppSelector } from "../../../store/hooks";
 import WeatherInfo from "../common/weather-info";
 import ForecastChart from "../forecast-chart";
 import RefreshButton from "../common/refresh-button";
 import { BoldFieldValueText } from "../common/bold-field-value-text";
 import { CityId } from "../../../utils/types";
+import CityCardNoCityError from "../card-no-city-error";
 
 const CityCardDetailed = ({ id }: { id: CityId }) => {
+  const cityExists = useAppSelector(selectCityExists(id));
   const city = useAppSelector(selectCityById(id));
   const {
     data: currentWeatherData,
@@ -44,12 +49,18 @@ const CityCardDetailed = ({ id }: { id: CityId }) => {
     refetch();
   };
 
-  if (!city || isWeatherLoading) {
-    return <CityCardSkeleton />;
+  if(!cityExists) {
+    return <CityCardNoCityError />
   }
+
   if (isWeatherError) {
     return <CityCardError onRetry={handleRetry} />;
   }
+
+  if (!city || isWeatherLoading) {
+    return <CityCardSkeleton />;
+  }
+
   const { name, countryCode, coords } = city;
   const {
     weather: [{ description, icon }],

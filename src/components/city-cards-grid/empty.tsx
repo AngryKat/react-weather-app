@@ -1,3 +1,4 @@
+import { SentimentVeryDissatisfied } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 
 const Empty = () => (
@@ -11,7 +12,9 @@ const Empty = () => (
       alignItems: "center",
     }}
   >
-    <Typography variant="h4">No cities yet :c</Typography>
+    <Typography variant="h4">
+      No cities yet <SentimentVeryDissatisfied />
+    </Typography>
     <Typography variant="subtitle1">
       Search for a location above and add here!
     </Typography>

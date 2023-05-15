@@ -1,7 +1,7 @@
 import { SentimentVeryDissatisfied } from "@mui/icons-material";
 import { Button, Stack, Box } from "@mui/material";
 
-const CityCardError = ({
+const CityCardFetchError = ({
   onRetry,
   gridCard = false,
 }: {
@@ -33,4 +33,4 @@ const CityCardError = ({
   );
 };
 
-export default CityCardError;
+export default CityCardFetchError;
