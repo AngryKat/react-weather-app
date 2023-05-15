@@ -107,7 +107,7 @@ const CityCard = ({ id }: { id: CityId }) => {
         </Stack>
       </CardContent>
       <CardActions>
-        <Link to={`/city/${id}`}>
+        <Link to={`city/${id}`}>
           <Button size="small" endIcon={<ArrowForwardIcon />}>
             Details
           </Button>
