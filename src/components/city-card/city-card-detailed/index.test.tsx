@@ -64,7 +64,7 @@ describe("CityCardDetailed", () => {
       client: queryClient,
     });
     expect(
-      await screen.findByText("There is no city with such id in the storage.")
+      await screen.findByText(/there is no city with such id in the storage/i)
     ).toBeInTheDocument();
   });
 });

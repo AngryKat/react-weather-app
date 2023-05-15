@@ -42,6 +42,6 @@ describe("CityCardsGrid", () => {
       preloadedState: mockStoreInitData,
     });
     renderWithProviders(<CityCardsGrid />, { store, client: queryClient });
-    expect(screen.getByText("No cities yet")).toBeInTheDocument();
+    expect(screen.getByText(/no cities yet/i)).toBeInTheDocument();
   });
 });

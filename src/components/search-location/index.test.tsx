@@ -38,7 +38,7 @@ describe("Search component", () => {
     await user.click(searchInput);
     await user.type(searchInput, "Kyiv");
     (getCities as jest.Mock).mockResolvedValueOnce([]);
-    expect(screen.getByText("No location found")).toBeInTheDocument();
+    expect(screen.getByText(/no location found/i)).toBeInTheDocument();
   });
   it("should show transformed label of a found option", async () => {
     const mockOption = {

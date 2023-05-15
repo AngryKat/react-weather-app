@@ -159,6 +159,6 @@ describe("CityCard", () => {
       store: reduxStore,
       client: queryClient,
     });
-    expect(await screen.findByText("Error occurred")).toBeInTheDocument();
+    expect(await screen.findByText(/error occurred/i)).toBeInTheDocument();
   });
 });

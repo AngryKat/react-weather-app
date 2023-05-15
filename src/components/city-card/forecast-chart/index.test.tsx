@@ -45,7 +45,7 @@ describe("ForecastChart", () => {
       client: queryClient,
     });
     expect(
-      await screen.findByText("Error while loading forecast")
+      await screen.findByText(/error while loading forecast/i)
     ).toBeInTheDocument();
   });
   it("should render loading spinner when data is fetching", async () => {
