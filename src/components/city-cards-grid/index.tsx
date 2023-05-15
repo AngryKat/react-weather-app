@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import CityCard from "../city-card/city-card";
+import CityCard from "../city-card";
 import Empty from "./empty";
 import { selectCitiesIds } from "../../store/cities/selectors";
 import { useAppSelector } from "../../store/hooks";

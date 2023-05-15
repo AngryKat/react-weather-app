@@ -138,8 +138,8 @@ describe("CityCardsGridPage", () => {
       store: reduxStore,
       client: queryClient,
     });
-    const clearIcon = screen.getByTestId("clear-button-3520102");
+    const clearIcon = screen.getByRole("button", { name: "remove" });
     await user.click(clearIcon);
-    expect(screen.getByText("No cities yet :c")).toBeInTheDocument();
+    expect(screen.getByText("No cities yet")).toBeInTheDocument();
   });
 });

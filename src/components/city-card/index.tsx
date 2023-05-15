@@ -75,7 +75,7 @@ const CityCard = ({ id }: { id: CityId }) => {
         }
         subheader={currentWeather.weather[0].description}
         action={
-          <IconButton aria-label="remove" onClick={handleRemove} data-testid={`clear-button-${id}`}>
+          <IconButton aria-label="remove" onClick={handleRemove}>
             <ClearIcon />
           </IconButton>
         }

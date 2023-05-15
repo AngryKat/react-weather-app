@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Box, CircularProgress } from "@mui/material";
 import { Area, AreaChart, Tooltip, XAxis, YAxis } from "recharts";
 
-import ForecastChartError from "./forecast-chart-error";
+import ForecastChartError from "./forecast-chart-fetch-error";
 import { getForecast } from "../../../utils/api";
 import { Coords } from "../../../utils/types";
 

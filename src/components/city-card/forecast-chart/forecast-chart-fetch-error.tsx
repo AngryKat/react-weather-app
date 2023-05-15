@@ -3,7 +3,7 @@ import { Button, Typography, Box } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-const ForecastChartError = ({ onRetry }: { onRetry: () => void }) => (
+const ForecastFetchChartError = ({ onRetry }: { onRetry: () => void }) => (
   <Box
     width={730}
     height={250}
@@ -21,4 +21,4 @@ const ForecastChartError = ({ onRetry }: { onRetry: () => void }) => (
   </Box>
 );
 
-export default ForecastChartError;
+export default ForecastFetchChartError;

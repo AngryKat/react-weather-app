@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { renderWithProviders } from "../../utils/test-utils";
 import { FetchStatus } from "../../utils/types";
-import CityCard from "./city-card";
+import CityCard from ".";
 import { citiesSlice } from "../../store/cities";
 import { store } from "../../store";
 import { QueryClient } from "@tanstack/react-query";
@@ -13,8 +13,13 @@ jest.mock("../../utils/api", () => ({
 }));
 
 describe("CityCard", () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+    jest.clearAllMocks();
+  });
   beforeEach(() => {
     jest.resetAllMocks();
+    jest.clearAllMocks();
   });
   const mockWeather = {
     weather: [
@@ -97,67 +102,63 @@ describe("CityCard", () => {
     expect(feelsLike).toBeInTheDocument();
   });
 
-  describe("CardSkeleton", () => {
-    it("should render CardSkeleton when data is fetching", async () => {
-      const queryClient = new QueryClient({
-        defaultOptions: {
-          queries: {
-            retry: false,
-          },
+  it("should render CardSkeleton when data is fetching", async () => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
         },
-        logger: {
-          log: console.log,
-          warn: console.warn,
-          error: () => {},
-        },
-      });
-
-      const reduxStore: typeof store = configureStore({
-        reducer: {
-          cities: citiesSlice.reducer,
-        },
-        preloadedState: mockStoreInitData,
-      });
-      (api.getCurrentWeather as jest.Mock).mockImplementation(
-        () => new Promise(() => {})
-      );
-      renderWithProviders(<CityCard id={3520102} />, {
-        store: reduxStore,
-        client: queryClient,
-      });
-      expect(screen.getByTestId("city-card-skeleton")).toBeInTheDocument();
+      },
+      logger: {
+        log: console.log,
+        warn: console.warn,
+        error: () => {},
+      },
     });
+
+    const reduxStore: typeof store = configureStore({
+      reducer: {
+        cities: citiesSlice.reducer,
+      },
+      preloadedState: mockStoreInitData,
+    });
+    (api.getCurrentWeather as jest.Mock).mockImplementation(
+      () => new Promise(() => {})
+    );
+    renderWithProviders(<CityCard id={3520102} />, {
+      store: reduxStore,
+      client: queryClient,
+    });
+    expect(screen.getByTestId("city-card-skeleton")).toBeInTheDocument();
   });
 
-  describe("CardError", () => {
-    it("should render error card when failed to load weather", async () => {
-      const queryClient = new QueryClient({
-        defaultOptions: {
-          queries: {
-            retry: false,
-          },
+  it("should render error card when failed to load weather", async () => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
         },
-        logger: {
-          log: console.log,
-          warn: console.warn,
-          error: () => {},
-        },
-      });
-
-      const reduxStore: typeof store = configureStore({
-        reducer: {
-          cities: citiesSlice.reducer,
-        },
-        preloadedState: mockStoreInitData,
-      });
-      (api.getCurrentWeather as jest.Mock).mockImplementation(
-        () => new Promise((resolve, reject) => reject())
-      );
-      renderWithProviders(<CityCard id={3520102} />, {
-        store: reduxStore,
-        client: queryClient,
-      });
-      expect(await screen.findByText("Error occurred")).toBeInTheDocument();
+      },
+      logger: {
+        log: console.log,
+        warn: console.warn,
+        error: () => {},
+      },
     });
+
+    const reduxStore: typeof store = configureStore({
+      reducer: {
+        cities: citiesSlice.reducer,
+      },
+      preloadedState: mockStoreInitData,
+    });
+    (api.getCurrentWeather as jest.Mock).mockImplementation(
+      () => new Promise((resolve, reject) => reject())
+    );
+    renderWithProviders(<CityCard id={3520102} />, {
+      store: reduxStore,
+      client: queryClient,
+    });
+    expect(await screen.findByText("Error occurred")).toBeInTheDocument();
   });
 });
