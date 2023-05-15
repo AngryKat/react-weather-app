@@ -10,7 +10,7 @@ const CityCardFetchError = ({
 }) => {
   return (
     <Box
-      width={gridCard ? "360px" : "720px"}
+      width={gridCard ? 360 : 720}
       height={356}
       sx={{
         bgcolor: "#bdbdbd",
