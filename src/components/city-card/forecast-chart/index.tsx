@@ -6,7 +6,7 @@ import ForecastChartError from "./forecast-chart-error";
 import { getForecast } from "../../../utils/api";
 import { Coords } from "../../../utils/types";
 
-const MAX_TEMP_OFFSET = 10;
+const MAX_TEMPERATURE_OFFSET = 10;
 
 const transformData = (data: any[]) => {
   return data.map((item) => {
@@ -74,14 +74,13 @@ const ForecastChart = ({ coords }: { coords: Coords }) => {
           <stop offset="95%" stopColor="#ffa733" stopOpacity={0} />
         </linearGradient>
       </defs>
-      <XAxis dataKey="dt_txt" />
+      <XAxis dataKey="dt_txt" interval="preserveStartEnd" />
       <YAxis
         hide
         domain={[
           (dataMin: number) => Math.min(dataMin, 0),
-          (dataMax: number) => dataMax + MAX_TEMP_OFFSET,
+          (dataMax: number) => dataMax + MAX_TEMPERATURE_OFFSET,
         ]}
-        allowDataOverflow
       />
       <Tooltip />
       <Area
