@@ -1,3 +1,4 @@
+import { ReactNode, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import {
@@ -27,7 +28,6 @@ import { BoldFieldValueText } from "./common/bold-field-value-text";
 import RefreshButton from "./common/refresh-button";
 import { removeCityFromLocalStorage } from "../../utils";
 import { CityId } from "../../utils/types";
-import { ReactNode, useState } from "react";
 
 const HoverableCardActionWrapper = ({
   children,
