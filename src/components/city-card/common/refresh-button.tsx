@@ -1,10 +1,10 @@
-import { Button } from "@mui/material";
+import { IconButton } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const RefreshButton = ({ onRefresh }: { onRefresh: () => void }) => (
-  <Button endIcon={<RefreshIcon />} onClick={onRefresh}>
-    Refresh
-  </Button>
+  <IconButton  onClick={onRefresh}>
+    <RefreshIcon />
+  </IconButton>
 );
 
 export default RefreshButton;

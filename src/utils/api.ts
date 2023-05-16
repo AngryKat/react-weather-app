@@ -37,7 +37,7 @@ export const getCities = async (namePrefix?: string): Promise<CityGeoDB[]> => {
         namePrefix,
       },
     });
-    return data.data || [];
+    return data.data;
   } catch (error) {
     console.error(error);
     return Promise.reject(error);
@@ -47,7 +47,7 @@ export const getCities = async (namePrefix?: string): Promise<CityGeoDB[]> => {
 export const getCity = async (id: string | number): Promise<CityGeoDB> => {
   try {
     const { data } = await geoDBApi.get<CityResponse>(`/cities/${id}`);
-    return data.data || {};
+    return data.data;
   } catch (error) {
     console.error(error);
     return Promise.reject(error);
@@ -64,7 +64,7 @@ export const getCurrentWeather = async (coords: Coords) => {
         units: "metric",
       },
     });
-    return data || {};
+    return data;
   } catch (error) {
     console.error(error);
     return Promise.reject(error);

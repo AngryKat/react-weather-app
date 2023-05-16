@@ -15,6 +15,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ClearIcon from "@mui/icons-material/Clear";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import RefreshButton from "./refresh-button";
 
 export const CityWeatherInfoSkeleton = ({
   showDetailedInfo = false,
@@ -72,7 +73,7 @@ export const CityWeatherInfoSkeleton = ({
 
 const CityCardSkeleton = ({ gridCard = false }: { gridCard?: boolean }) => {
   return (
-    <Card sx={{ width: gridCard ? "360px" : "720px" }} data-testid="city-card-skeleton">
+    <Card sx={{ width: gridCard ? 380 : 720 }} data-testid="city-card-skeleton">
       <CardHeader
         sx={{
           backgroundColor: "#ffa733",
@@ -83,6 +84,7 @@ const CityCardSkeleton = ({ gridCard = false }: { gridCard?: boolean }) => {
         subheader={<Skeleton width={120} height={24} />}
         action={
           <>
+            <RefreshButton onRefresh={() => {}} />
             {gridCard && (
               <IconButton aria-label="remove">
                 <ClearIcon />

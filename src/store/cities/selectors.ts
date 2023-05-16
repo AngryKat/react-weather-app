@@ -18,6 +18,3 @@ export const selectCitiesFetchStatus = createDraftSafeSelector(
   selectSlice,
   (state) => state.status
 );
-
-export const selectCityExists = (id: CityId) =>
-  createDraftSafeSelector(selectCitiesIds, (ids) => ids.includes(id));
