@@ -114,7 +114,8 @@ const CityCard = ({ id }: { id: CityId }) => {
   return (
     <Card
       sx={{
-        width: 380,
+        width: 360,
+        maxWidth: 360,
       }}
     >
       <CardHeader

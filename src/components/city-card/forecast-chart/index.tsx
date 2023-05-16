@@ -5,8 +5,9 @@ import { Area, AreaChart, Tooltip, XAxis, YAxis } from "recharts";
 import ForecastChartError from "./forecast-chart-fetch-error";
 import { getForecast } from "../../../utils/api";
 import { Coords } from "../../../utils/types";
+import { useEffect } from "react";
 
-const MAX_TEMPERATURE_OFFSET = 10;
+const MAX_TEMPERATURE_OFFSET = 20;
 
 const transformData = (data: any[]) => {
   return data.map((item) => {
@@ -23,11 +24,18 @@ const transformData = (data: any[]) => {
   });
 };
 
-const ForecastChart = ({ coords }: { coords: Coords }) => {
+const ForecastChart = ({
+  coords,
+  isRefetching,
+}: {
+  coords: Coords;
+  isRefetching: boolean;
+}) => {
   const {
     data: forecastData,
     isLoading,
     isError,
+    isRefetching: isForecastRefetching,
     refetch,
   } = useQuery({
     queryKey: ["forecast", coords],
@@ -35,11 +43,17 @@ const ForecastChart = ({ coords }: { coords: Coords }) => {
     enabled: !!coords,
   });
 
+  useEffect(() => {
+    if (isRefetching) {
+      refetch();
+    }
+  }, [isRefetching, refetch]);
+
   const handleRetry = () => {
     refetch();
   };
 
-  if (isLoading) {
+  if (isLoading || isForecastRefetching) {
     return (
       <Box
         width={730}

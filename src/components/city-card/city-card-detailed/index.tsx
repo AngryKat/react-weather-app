@@ -40,6 +40,8 @@ const CityCardDetailed = ({ id }: { id: CityId }) => {
     enabled: !!city,
   });
 
+  
+
   const handleRetry = () => {
     refetch();
   };
@@ -98,7 +100,7 @@ const CityCardDetailed = ({ id }: { id: CityId }) => {
             </Grid>
           </Grid>
           <WeatherInfo currentWeather={currentWeatherData} detailed />
-          <ForecastChart coords={coords} />
+          <ForecastChart coords={coords} isRefetching={isRefetching} />
         </Stack>
       </CardContent>
       <CardActions>

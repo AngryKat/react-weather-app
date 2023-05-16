@@ -40,10 +40,13 @@ describe("ForecastChart", () => {
     (api.getForecast as jest.Mock).mockImplementation(
       () => new Promise((resolve, reject) => reject())
     );
-    renderWithProviders(<ForecastChart coords={mockCoords} />, {
-      store,
-      client: queryClient,
-    });
+    renderWithProviders(
+      <ForecastChart coords={mockCoords} isRefetching={false} />,
+      {
+        store,
+        client: queryClient,
+      }
+    );
     expect(
       await screen.findByText(/error while loading forecast/i)
     ).toBeInTheDocument();
@@ -52,10 +55,13 @@ describe("ForecastChart", () => {
     (api.getForecast as jest.Mock).mockImplementation(
       () => new Promise(() => {})
     );
-    renderWithProviders(<ForecastChart coords={mockCoords} />, {
-      store,
-      client: queryClient,
-    });
+    renderWithProviders(
+      <ForecastChart coords={mockCoords} isRefetching={false} />,
+      {
+        store,
+        client: queryClient,
+      }
+    );
     expect(await screen.findByRole("progressbar")).toBeInTheDocument();
   });
 });
